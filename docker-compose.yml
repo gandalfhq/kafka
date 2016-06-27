@@ -19,3 +19,12 @@ services:
       - kafka
       - zookeeper
     command: /bin/bash
+  manager:
+    image: sheepkiller/kafka-manager
+    ports:
+      - "9000:9000"
+    links:
+      - kafka
+      - zookeeper
+    environment:
+      ZK_HOSTS: zookeeper:2181

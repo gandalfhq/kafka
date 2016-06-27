@@ -52,6 +52,11 @@ And read those messages:
 
         $KAFKA_HOME/bin/kafka-console-consumer.sh --zookeeper zookeeper:2181 --topic test --from-beginning
 
+## Kafka Manager
+[Kafka Manager](https://github.com/yahoo/kafka-manager) is included with this compose script. It can be accessed at [http://localhost:9000].
+
+You might have to manually tell the manager about your cluster. To do so, just use a zookeeper address of `zookeeper:2181`.
+
 ##Note
 
 The default ```docker-compose.yml``` should be seen as a starting point. By default each broker will get a new port number and broker id on restart. Depending on your use case this might not be desirable. If you need to use specific ports and broker ids, modify the docker-compose configuration accordingly, e.g. [docker-compose-single-broker.yml](https://github.com/wurstmeister/kafka-docker/blob/master/docker-compose-single-broker.yml):
