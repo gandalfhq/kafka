@@ -12,8 +12,6 @@ The image is available directly from https://registry.hub.docker.com/
 ##Pre-Requisites
 
 - install docker-compose [https://docs.docker.com/compose/install/](https://docs.docker.com/compose/install/)
-- modify the ```KAFKA_ADVERTISED_HOST_NAME``` in ```docker-compose.yml``` to match your docker host IP (Note: Do not use localhost or 127.0.0.1 as the host ip if you want to run multiple brokers.)
-- if you want to customise any Kafka parameters, simply add them as environment variables in ```docker-compose.yml```, e.g. in order to increase the ```message.max.bytes``` parameter set the environment to ```KAFKA_MESSAGE_MAX_BYTES: 2000000```. To turn off automatic topic creation set ```KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'false'```
 
 ##Usage
 
@@ -29,6 +27,31 @@ Destroy a cluster:
 
 - ```docker-compose stop```
 
+## Commands
+
+You can enter a command line through docker-compose:
+
+        docker-compose run bash
+
+You can then run commands, with these variables:
+
+- `$KAFKA_HOME` is the Kafka installation directory.
+- `zookeeper:2181` is the address for accessing zookeeper
+- `kafka:9092` is the address for accessing kafka
+
+For example, you can create some topics:
+
+        $KAFKA_HOME/bin/kafka-topics.sh --create --topic test --partitions 4 --zookeeper zookeeper:2181 --replication-factor 2
+        $KAFKA_HOME/bin/kafka-topics.sh --list --zookeeper zookeeper:2181
+
+Or send some messages:
+
+        $KAFKA_HOME/bin/kafka-console-producer.sh --broker-list kafka:9092 --topic test
+
+And read those messages:
+
+        $KAFKA_HOME/bin/kafka-console-consumer.sh --zookeeper zookeeper:2181 --topic test --from-beginning
+
 ##Note
 
 The default ```docker-compose.yml``` should be seen as a starting point. By default each broker will get a new port number and broker id on restart. Depending on your use case this might not be desirable. If you need to use specific ports and broker ids, modify the docker-compose configuration accordingly, e.g. [docker-compose-single-broker.yml](https://github.com/wurstmeister/kafka-docker/blob/master/docker-compose-single-broker.yml):
@@ -38,6 +61,10 @@ The default ```docker-compose.yml``` should be seen as a starting point. By defa
 ##Broker IDs
 
 If you don't specify a broker id in your docker-compose file, it will automatically be generated (see [https://issues.apache.org/jira/browse/KAFKA-1070](https://issues.apache.org/jira/browse/KAFKA-1070). This allows scaling up and down. In this case it is recommended to use the ```--no-recreate``` option of docker-compose to ensure that containers are not re-created and thus keep their names and ids.
+
+## Customization
+- modify the ```KAFKA_ADVERTISED_HOST_NAME``` in ```docker-compose.yml``` to match your docker host IP (Note: Do not use localhost or 127.0.0.1 as the host ip if you want to run multiple brokers.)
+- if you want to customise any Kafka parameters, simply add them as environment variables in ```docker-compose.yml```, e.g. in order to increase the ```message.max.bytes``` parameter set the environment to ```KAFKA_MESSAGE_MAX_BYTES: 2000000```. To turn off automatic topic creation set ```KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'false'```
 
 
 ##Automatically create topics
