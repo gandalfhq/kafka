@@ -7,7 +7,7 @@ services:
   kafka:
     build: .
     ports:
-      - "9092"
+      - "9092:9092"
     environment:
       HOSTNAME_COMMAND: "route -n | awk '/UG[ \t]/{print $$2}'"
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
