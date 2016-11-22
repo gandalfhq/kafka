@@ -41,7 +41,7 @@ You can then run commands, with these variables:
 
 For example, you can create some topics:
 
-        $KAFKA_HOME/bin/kafka-topics.sh --create --topic test --partitions 4 --zookeeper zookeeper:2181 --replication-factor 2
+        $KAFKA_HOME/bin/kafka-topics.sh --create --topic test --partitions 4 --zookeeper zookeeper:2181 --replication-factor 1
         $KAFKA_HOME/bin/kafka-topics.sh --list --zookeeper zookeeper:2181
 
 Or send some messages:
