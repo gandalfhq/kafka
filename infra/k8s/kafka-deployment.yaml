@@ -1,0 +1,40 @@
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+apiVersion: extensions/v1beta1
+metadata:
+  name: kafka-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: kafka
+  template:
+    metadata:
+      labels:
+        name: kafka
+    spec:
+      volumes:
+      - name: docker-sock
+        hostPath:
+          # directory location on host
+          path: /var/run/docker.sock
+      containers:
+      - name: kafka
+        image: 011790541531.dkr.ecr.us-east-1.amazonaws.com/gandalf_kafka:e6c1f56a28ff
+        ports:
+        - containerPort: 9092
+        volumeMounts:
+        - mountPath: /var/run/docker.sock
+          name: docker-sock
+        env:
+        - name: KAFKA_ZOOKEEPER_CONNECT
+          value: "zookeeper:2181"
+        - name: HOSTNAME_COMMAND
+          value: "route -n | awk '/UG[ \t]/{print $$2}'"
+
+          /var/run/docker.sock:/var/run/docker.sock
+        # - name: KAFKA_ZOOKEEPER_CONNECT
+        #   value: zoo1:2181,zoo2:2181,zoo3:2181
+        # - name: KAFKA_CREATE_TOPICS
+        #   value: mytopic:2:1
